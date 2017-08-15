@@ -55,46 +55,56 @@ class AuthController extends Controller
     		"year" => $r->user_info_year
     	);
     	$name = $r->user_name;
+        $non_hash_password = $password;
     	$password = User::hash($password);
     	$api_key = md5(time().$email);
+
+        $rewrite_password = $r->user_rewrite_password;
 
     	$users = DB::table("users")
     		->where("email", $email)
     		->orWhere("login", $login);
 
-    	if(isset($users->id) AND isset($users->login)) {
-    		print_r("User found!");
-    	}
-    	else {
-    		$id = intval(0);
-    		$id = DB::table("users")->insertGetId(
-    				[
-    					"ulogin" => $login,
-    					"email" => $email,
-    					"name"  => $name,
-    					"password" => $password,
-    					"api_key" => $api_key,
-    					"born_day" => $date["day"],
-    					"born_month" => $date["month"],
-    					"born_year" => $date["year"],
-    					"email_able" => 1,
-    					"image" => null
-    				]
-    			);
+
+    	if($non_hash_password != $rewrite_password) {
+            return view("auth", ["error_message" => "Паролі повинні бути однакові. Повторіть будь-ласка знову!", "title" => "Вхід та реєстрація"]);
+        }
+        else {
+            if(isset($users->id) AND isset($users->login)) {
+                return view("auth", ["error_message" => "Такий логін або поштова скринька вже зайняті. Спробуйте знову.", "title" => "Вхід та реєстрація"]);
+            }
+            else {
+                $id = intval(0);
+                $id = DB::table("users")->insertGetId(
+                        [
+                            "ulogin" => $login,
+                            "email" => $email,
+                            "name"  => $name,
+                            "password" => $password,
+                            "api_key" => $api_key,
+                            "born_day" => $date["day"],
+                            "born_month" => $date["month"],
+                            "born_year" => $date["year"],
+                            "email_able" => 1,
+                            "image" => null,
+                            "followers" => 0
+                        ]
+                    );
 
 
-    		session()->put("user", array(
-    			"login" => $login,
-    			"email" => $email,
-    			"api_key" => $api_key,
-    			"id" => $id,
-    			"date" => $date,
-    			"name" => $name
-    		));
+                session()->put("user", array(
+                    "login" => $login,
+                    "email" => $email,
+                    "api_key" => $api_key,
+                    "id" => $id,
+                    "date" => $date,
+                    "name" => $name
+                ));
 
-    		return redirect("profile/".$id);
+                return redirect("profile/".$id);
 
-    	}
+            }
+        }
 
     }
 

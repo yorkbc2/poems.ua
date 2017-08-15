@@ -49,6 +49,7 @@
 					</div>
 					<div class="panel-body">
 						<h2>Рецензії на поему : </h2>
+						@if(session()->get("user"))
 						<form class="form-field" v-on:submit.prevent="setReview($event)">
 							{{csrf_field()}}
 							<input type="hidden" name="post_id" id="post_id_hidden" value="{{$poem->id}}">
@@ -61,6 +62,11 @@
 								</button>
 							</div>
 						</form>
+						@else
+						<div class="alert alert-info">
+							Щоб залишати рецензії на поему, Вам потрібно зареєструватись або авторизуватися на сайті по посиланню в навігаторі або <a href="/auth">Тут</a>
+						</div>
+						@endif
 						<div class="little-line"></div>
 						<div class="reviews" id="reviews">
 							@if(count($reviews) > 0) 

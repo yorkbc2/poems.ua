@@ -10,8 +10,23 @@ use App\User;
 use App\Review;
 use App\Star;
 
+use App\Follower;
+
 class PoemsController extends Controller
 {
+    public function indexPage (Request $r) {
+
+        $last_poems = Poem::orderBy("id", "desc")->limit(10)->get();
+
+        $best_authors = User::orderBy("followers", "desc")->limit(3)->get();
+
+        return view("index", [
+            "last_poems" => $last_poems,
+            "best_authors" => $best_authors
+        ]);
+
+    }
+
     public function addView( Request $r )
     {
     	
@@ -105,7 +120,10 @@ class PoemsController extends Controller
             ->orderBy("id", "desc")
             ->get();
 
-        $isStared = Star::where("poem_id", $id)->first();
+        $isStared = Star::where([
+            ["poem_id", $id],
+            ["user_id", session()->get("user")["id"]]
+        ])->first();
 
         if(isset($isStared->id)) {
             $isStared = true;
@@ -121,10 +139,6 @@ class PoemsController extends Controller
                 Poem::where("id", $id)
                         ->increment("views");
             }
-        }
-        else {
-            Poem::where("id", $id)
-                        ->increment("views");
         }
 
         return view("poems.item", ["poem" => $poem, "category_name" => $category_name, "author_login" => $author->ulogin, "reviews" => $reviews, "stared" => $isStared]);
@@ -160,6 +174,40 @@ class PoemsController extends Controller
 
 
     public function feed ( Request $r ) {
+
+        if(session()->get("user")) {
+
+            $user = session()->get("user");
+
+            $followers = Follower::where("user", $user["id"])->get();
+
+            $followers_id = [];
+
+            for($i = 0; $i < count($followers) ; $i++) {
+
+                array_push($followers_id, $followers[$i]["profile"]);
+
+            }
+
+            $categories = Category::all();
+
+            $users = [];
+
+            if(count($followers_id) > 0 ) {
+                $users = User::where("id", $followers_id)->get();
+            }
+            else {
+                $users = [];
+            }
+
+
+            return Poem::controlGet($followers_id, $categories, $users);
+
+
+        }
+        else {
+            return redirect("auth");
+        }
 
     }
 }

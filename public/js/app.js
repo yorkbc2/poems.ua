@@ -44791,6 +44791,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: ["user", "poem", "stared", "token"],
 
+	data: function data() {
+
+		return {
+			star: this.stared
+		};
+	},
+
+
 	methods: {
 		unStarPoem: function unStarPoem() {
 			this.sendStarPost("unstar", false);
@@ -44806,7 +44814,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				poem: this.poem,
 				_token: this.token
 			}, { emulateJSON: true }).then(function (res) {
-				_this.stared = stared;
+				_this.star = stared;
 			}, function (err) {
 				return console.error(err);
 			});
@@ -44823,7 +44831,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "display": "inline-block"
     }
-  }, [(_vm.stared == 'true' || _vm.stared == true) ? _c('button', {
+  }, [(_vm.star == 'true' || _vm.star == true) ? _c('button', {
     staticClass: "star active-star",
     on: {
       "click": function($event) {

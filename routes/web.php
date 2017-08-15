@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', "PoemsController@indexPage");
 
 
 // Auth controller and auth routes 
@@ -75,3 +73,5 @@ Route::post("/poem/unstar", "StarsController@unstar");
 
 
 Route::get("/search", "SearchController@searchByQuery");
+
+Route::get("/feed", "PoemsController@feed");

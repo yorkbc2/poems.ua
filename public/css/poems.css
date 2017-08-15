@@ -406,3 +406,33 @@
 	top: -5px;
 	right: 10px;
 }
+
+.list {
+	margin: 0;
+	padding: 0;
+}
+
+.list li {
+	list-style: none;
+	display: block;
+}
+
+.author-name {
+	font-size: 12pt;
+	text-decoration: none;
+	color: #333;
+	font-family: "Open Sans", sans-serif;
+	font-weight: bolder;
+}
+
+.author-name h2 {
+	font-size: 12pt;
+}
+
+.follower-span {
+	font-size: 22pt;
+	font-weight: bolder;
+
+	padding: 10px 0;
+	border-bottom: 2px solid #ff3333;
+}

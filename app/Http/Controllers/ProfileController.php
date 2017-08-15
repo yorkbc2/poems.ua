@@ -77,12 +77,14 @@ class ProfileController extends Controller
             }
             else {
                 return view("profile", ["profile" => $profile, "title" => $profile->name,
-                        "poems" => $poems]);
+                        "poems" => $poems,
+                        "star_poems" => $star_poems]);
             }
         }
         else {
             return view("profile", ["profile" => $profile, "title" => "Користувача не знайдено",
-                        "poems" => $poems]);
+                        "poems" => $poems,
+                        "star_poems" => $star_poems]);
         }
     }
 }

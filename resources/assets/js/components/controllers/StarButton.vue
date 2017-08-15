@@ -1,6 +1,6 @@
 <template>
 	<div style="display: inline-block;">
-		<button v-if="stared == 'true' || stared == true" class="star active-star" @click="unStarPoem()">
+		<button v-if="star == 'true' || star == true" class="star active-star" @click="unStarPoem()">
 			<i class="fa fa-star"></i>
 		</button>
 		<button v-else @click="starPoem()" class="star">
@@ -12,6 +12,14 @@
 <script>
 	export default {
 		props: ["user", "poem", "stared", "token"],
+
+		data() {
+
+			return {
+				star: this.stared
+			}
+
+		},
 
 		methods: {
 			unStarPoem() {
@@ -27,7 +35,7 @@
 					poem: this.poem,
 					_token: this.token
 				}, {emulateJSON: true}).then(res =>{
-					this.stared = stared
+					this.star = stared
 				}, err => console.error(err))
 
 			}

@@ -18,6 +18,8 @@ class FollowingController extends Controller
 
     	$followers = Follower::where("profile", $profileID)->get();
 
+        User::where('id', $profileID)->increment("followers");
+
         $followersCount = count($followers);
 
         echo $followersCount;
@@ -34,6 +36,8 @@ class FollowingController extends Controller
         ])->delete();
 
         $followers = Follower::where("profile", $profileID)->get();
+
+        User::where('id', $profileID)->decrement("followers");
 
         $followersCount = count($followers);
 
